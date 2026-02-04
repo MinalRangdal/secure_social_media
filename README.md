@@ -19,18 +19,25 @@ python -m venv .venv
 .venv\Scripts\activate
 ```
 
-### 3. Install Required Packages
+### 3. Required Packages
+Create a requirements.txt file and add 
+``` bash
+Flask==3.0.0
+bcrypt==4.1.2
+Werkzeug==3.0.1
+```
+### 4. Install Required Packages
 ``` bash
 pip install -r requirements.txt
 pip install Pillow imagehash
 ```
 
-### 4. Final Run command
+### 5. Final Run command
 ``` bash
 python app.py
 ```
 
-### 5 Open in Browser 
+### 6. Open in Browser 
 
 ```text
 http://127.0.0.1:5000
