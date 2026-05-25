@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Result - CryptoGram</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            padding-bottom: 50px;
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #dbdbdb;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-content {
+            max-width: 975px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #262626;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: #f0f0f0;
+        }
+        
+        /* Verification Container */
+        .verify-container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .verify-card {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        /* Result Header */
+        .result-header {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #efefef;
+        }
+        
+        .result-header.verified {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+        
+        .result-header.unverified {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        }
+        
+        .result-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+        
+        .result-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .result-header.verified .result-title {
+            color: #155724;
+        }
+        
+        .result-header.unverified .result-title {
+            color: #721c24;
+        }
+        
+        .result-subtitle {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        /* Hash Details */
+        .hash-details {
+            padding: 30px;
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #8e8e8e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .detail-value {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            padding: 12px;
+            background: #f9f9f9;
+            border: 1px solid #efefef;
+            border-radius: 6px;
+            word-break: break-all;
+            color: #262626;
+        }
+        
+        .hash-match {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .hash-match.verified {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .hash-match.unverified {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hash-match-icon {
+            font-size: 24px;
+        }
+        
+        .hash-match-text {
+            flex: 1;
+        }
+        
+        .hash-match-text strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        
+        .hash-match-text span {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        /* Post Info */
+        .post-info {
+            padding: 20px 30px;
+            background: #fafafa;
+            border-top: 1px solid #efefef;
+        }
+        
+        .post-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        
+        .post-info-label {
+            color: #8e8e8e;
+            font-weight: 600;
+        }
+        
+        .post-info-value {
+            color: #262626;
+        }
+        
+        /* Explanation */
+        .explanation-card {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            padding: 30px;
+        }
+        
+        .explanation-card h3 {
+            font-size: 20px;
+            color: #262626;
+            margin-bottom: 15px;
+        }
+        
+        .explanation-card p {
+            font-size: 14px;
+            color: #262626;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .explanation-card ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .explanation-card li {
+            font-size: 14px;
+            color: #262626;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .explanation-card code {
+            background: #f9f9f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #262626;
+            border: 1px solid #dbdbdb;
+        }
+        
+        .btn-secondary:hover {
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">🔐 CryptoGram</div>
+            <div class="nav-links">
+                <a href="/home">← Back to Feed</a>
+                <a href="/crypto-demo">🔬 Crypto Demo</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Verification Result -->
+    <div class="verify-container">
+        <!-- Result Card -->
+        <div class="verify-card">
+            <!-- Header -->
+            <div class="result-header {% if verification.is_valid %}verified{% else %}unverified{% endif %}">
+                <div class="result-icon">
+                    {% if verification.is_valid %}✅{% else %}❌{% endif %}
+                </div>
+                <h1 class="result-title">
+                    {% if verification.is_valid %}
+                    Content Verified
+                    {% else %}
+                    Verification Failed
+                    {% endif %}
+                </h1>
+                <p class="result-subtitle">
+                    {% if verification.is_valid %}
+                    This image passed cryptographic integrity check
+                    {% else %}
+                    This image failed cryptographic verification
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Hash Details -->
+            <div class="hash-details">
+                <div class="detail-section">
+                    <div class="detail-label">Current Image Hash (SHA-256)</div>
+                    <div class="detail-value">{{ verification.current_hash }}</div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-label">Stored Original Hash</div>
+                    <div class="detail-value">{{ verification.stored_hash }}</div>
+                </div>
+
+                <!-- Hash Match Status -->
+                <div class="hash-match {% if verification.is_valid %}verified{% else %}unverified{% endif %}">
+                    <div class="hash-match-icon">
+                        {% if verification.is_valid %}🔒{% else %}⚠️{% endif %}
+                    </div>
+                    <div class="hash-match-text">
+                        <strong>
+                            {% if verification.is_valid %}
+                            Hashes Match - Content Authentic
+                            {% else %}
+                            Hashes Don't Match - Content Modified
+                            {% endif %}
+                        </strong>
+                        <span>
+                            {% if verification.is_valid %}
+                            The image is identical to the original upload
+                            {% else %}
+                            The image differs from the original (screenshot, edit, or re-upload)
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post Info -->
+            <div class="post-info">
+                <div class="post-info-item">
+                    <span class="post-info-label">Posted By:</span>
+                    <span class="post-info-value">{{ post.username }}</span>
+                </div>
+                <div class="post-info-item">
+                    <span class="post-info-label">Upload Time:</span>
+                    <span class="post-info-value">{{ post.timestamp[:19] }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation -->
+        <div class="explanation-card">
+            <h3>🎓 How Cryptographic Verification Works</h3>
+            
+            <p>
+                <strong>SHA-256 Hash Function:</strong> A cryptographic algorithm that converts any input 
+                (in this case, image bytes) into a fixed 64-character hexadecimal string.
+            </p>
+
+            <p><strong>What This Verification Proves:</strong></p>
+            <ul>
+                <li><strong>Integrity:</strong> Any modification to the image (even a single pixel) produces a completely different hash</li>
+                <li><strong>Authenticity:</strong> The stored hash proves this exact image was uploaded by the original user</li>
+                <li><strong>Non-Repudiation:</strong> The uploader cannot deny posting this specific content</li>
+                <li><strong>Tamper Detection:</strong> Screenshots, edits, or re-compressions will fail verification</li>
+            </ul>
+
+            {% if not verification.is_valid %}
+            <p><strong>Why Verification Failed:</strong></p>
+            <ul>
+                <li>Image was modified after original upload</li>
+                <li>This is a screenshot of the original</li>
+                <li>Image was re-uploaded (different file, even if visually identical)</li>
+                <li>Metadata or compression changed</li>
+            </ul>
+            {% endif %}
+
+            <p>
+                <strong>Real-World Applications:</strong> This same technology is used in Bitcoin blockchain, 
+                SSL certificates, digital signatures, Git version control, and file integrity monitoring systems.
+            </p>
+
+            <div class="action-buttons">
+                <a href="/home" class="btn btn-primary">Back to Feed</a>
+                <a href="/crypto-demo" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptography Demo - CryptoGram</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            padding-bottom: 50px;
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #dbdbdb;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-content {
+            max-width: 975px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #262626;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: #f0f0f0;
+        }
+        
+        /* Demo Container */
+        .demo-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Section Cards */
+        .section-card {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .section-card h2 {
+            font-size: 28px;
+            color: #262626;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-card h3 {
+            font-size: 20px;
+            color: #262626;
+            margin: 25px 0 15px 0;
+        }
+        
+        .section-card p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #262626;
+            margin-bottom: 15px;
+        }
+        
+        .section-card ul, .section-card ol {
+            margin: 15px 0 15px 30px;
+        }
+        
+        .section-card li {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #262626;
+            margin-bottom: 10px;
+        }
+        
+        .section-card code {
+            background: #f9f9f9;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #e83e8c;
+        }
+        
+        /* Highlight Boxes */
+        .highlight-box {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .highlight-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+        
+        .highlight-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+        
+        .highlight-info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }
+        
+        .highlight-danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .highlight-box h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        /* Flow Diagram */
+        .flow-diagram {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            border: 1px solid #efefef;
+        }
+        
+        .flow-step {
+            padding: 10px 0;
+            color: #262626;
+        }
+        
+        .flow-arrow {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        /* Comparison Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #efefef;
+        }
+        
+        th {
+            background: #f9f9f9;
+            font-weight: 600;
+            color: #262626;
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">🔐 CryptoGram</div>
+            <div class="nav-links">
+                <a href="/home">← Back to Feed</a>
+                <a href="/upload">+ New Post</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Demo Content -->
+    <div class="demo-container">
+        <!-- Hero -->
+        <div class="hero">
+            <h1>🔬 Cryptography Demo</h1>
+            <p>Understanding how SHA-256 hashing protects social media content from unauthorized reuse and tampering</p>
+        </div>
+
+        <!-- What is This System? -->
+        <div class="section-card">
+            <h2>📚 What is This System?</h2>
+            <p>
+                <strong>CryptoGram</strong> is an academic demonstration of how cryptographic hashing can be used to:
+            </p>
+            <ul>
+                <li><strong>Verify Content Integrity:</strong> Detect if an image has been modified or tampered with</li>
+                <li><strong>Establish Ownership:</strong> Prove who originally uploaded specific content</li>
+                <li><strong>Detect Unauthorized Reuse:</strong> Identify screenshots or re-uploads of original content</li>
+                <li><strong>Prevent Repudiation:</strong> Users cannot deny posting specific content</li>
+            </ul>
+
+            <div class="highlight-warning">
+                <h4>⚠️ Important Disclaimer</h4>
+                <p>
+                    This system does <strong>NOT</strong> prevent screenshots at the OS level. That is technically impossible 
+                    for web applications. Instead, it provides <strong>cryptographic proof</strong> of content authenticity 
+                    and detects tampering.
+                </p>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="section-card">
+            <h2>⚙️ How It Works</h2>
+            
+            <h3>Step-by-Step Process:</h3>
+            
+            <div class="flow-diagram">
+<div class="flow-step">1. USER UPLOADS IMAGE</div>
+<div class="flow-arrow">   ↓</div>
+<div class="flow-step">2. BACKEND READS IMAGE BYTES</div>
+<div class="flow-arrow">   ↓</div>
+<div class="flow-step">3. SHA-256 ALGORITHM PROCESSES BYTES</div>
+<div class="flow-arrow">   ↓</div>
+<div class="flow-step">4. GENERATES 64-CHARACTER HEXADECIMAL HASH</div>
+<div class="flow-step">   Example: a3f5b8c2d4e6f1a2b3c4d5e6f7a8b9c0...</div>
+<div class="flow-arrow">   ↓</div>
+<div class="flow-step">5. HASH STORED IN DATABASE (linked to user & image)</div>
+<div class="flow-arrow">   ↓</div>
+<div class="flow-step">6. IMAGE DISPLAYED NORMALLY IN FEED</div>
+<div class="flow-arrow">   ↓</div>
+<div class="flow-step">7. IF VERIFICATION REQUESTED:</div>
+<div class="flow-step">   - Recompute current image hash</div>
+<div class="flow-step">   - Compare with stored hash</div>
+<div class="flow-step">   - Match = ✅ Verified | Mismatch = ❌ Tampered</div>
+            </div>
+
+            <h3>Why SHA-256?</h3>
+            <ul>
+                <li><strong>Deterministic:</strong> Same input always produces same output</li>
+                <li><strong>One-Way Function:</strong> Cannot reverse hash to get original image</li>
+                <li><strong>Collision Resistant:</strong> Virtually impossible for two different images to have same hash</li>
+                <li><strong>Avalanche Effect:</strong> Changing one pixel completely changes the hash</li>
+                <li><strong>Fast Computation:</strong> Quick to generate and verify</li>
+                <li><strong>Industry Standard:</strong> Used in Bitcoin, SSL, digital signatures</li>
+            </ul>
+        </div>
+
+        <!-- What Can and Cannot Be Done -->
+        <div class="section-card">
+            <h2>✅ What This System CAN Do</h2>
+            
+            <div class="highlight-success">
+                <h4>✓ Cryptographic Guarantees</h4>
+                <ul>
+                    <li>Detect if an image has been modified (even by 1 pixel)</li>
+                    <li>Prove original ownership with timestamp</li>
+                    <li>Identify screenshots (different file = different hash)</li>
+                    <li>Verify content integrity</li>
+                    <li>Prevent users from denying they posted something</li>
+                    <li>Mark unverified content visually (blur + warning)</li>
+                </ul>
+            </div>
+
+            <h2 style="margin-top: 30px;">❌ What This System CANNOT Do</h2>
+            
+            <div class="highlight-danger">
+                <h4>✗ Technical Limitations</h4>
+                <ul>
+                    <li>Cannot prevent screenshots (OS-level operation)</li>
+                    <li>Cannot stop users from downloading images</li>
+                    <li>Cannot prevent screen recording</li>
+                    <li>Cannot stop someone from taking a photo of the screen</li>
+                    <li>Cannot block image viewing</li>
+                </ul>
+            </div>
+
+            <div class="highlight-info">
+                <h4>💡 Why Screenshots Can't Be Blocked</h4>
+                <p>
+                    Screenshots are controlled by the operating system (Windows, macOS, Android, iOS), not web browsers. 
+                    Web applications run in a sandboxed environment with limited system access. Only OS-level DRM 
+                    (like Netflix on mobile apps) can prevent screenshots, and even that is not foolproof.
+                </p>
+                <p>
+                    <strong>Our approach:</strong> Instead of trying to prevent the impossible, we focus on 
+                    <em>detection and verification</em> using cryptography.
+                </p>
+            </div>
+        </div>
+
+        <!-- Real-World Scenario -->
+        <div class="section-card">
+            <h2>🎯 Real-World Scenario</h2>
+            
+            <h3>Scenario: User Alice posts a photo</h3>
+            <ol>
+                <li>Alice uploads <code>photo.jpg</code></li>
+                <li>System computes: <code>hash_A = SHA256(photo.jpg)</code></li>
+                <li>Hash stored: <code>a3f5b8c2d4e6...</code></li>
+                <li>Photo appears in feed with ✅ Verified badge</li>
+            </ol>
+
+            <h3>Scenario: User Bob tries to reuse Alice's photo</h3>
+            <ol>
+                <li>Bob takes screenshot of Alice's photo</li>
+                <li>Bob uploads screenshot as his own post</li>
+                <li>System computes: <code>hash_B = SHA256(screenshot.png)</code></li>
+                <li>Result: <code>hash_B ≠ hash_A</code></li>
+                <li>System marks Bob's post as ⚠️ Unverified</li>
+                <li>Original ownership remains with Alice</li>
+            </ol>
+
+            <h3>Why hashes differ:</h3>
+            <ul>
+                <li>Screenshot has different metadata</li>
+                <li>Different file format (JPG → PNG)</li>
+                <li>Screen compression artifacts</li>
+                <li>Pixel values may slightly differ</li>
+                <li>File structure is completely different</li>
+            </ul>
+
+            <p><strong>Result:</strong> Even if Bob's screenshot looks identical to human eyes, cryptography proves it's not the original.</p>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="section-card">
+            <h2>📊 Traditional vs Cryptographic Protection</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Traditional (Watermarks)</th>
+                        <th>Cryptographic (Hashing)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tampering Detection</td>
+                        <td>Can be removed</td>
+                        <td>✅ Guaranteed detection</td>
+                    </tr>
+                    <tr>
+                        <td>Ownership Proof</td>
+                        <td>Can be photoshopped out</td>
+                        <td>✅ Mathematically proven</td>
+                    </tr>
+                    <tr>
+                        <td>Visual Impact</td>
+                        <td>❌ Visible watermark ruins aesthetics</td>
+                        <td>✅ Invisible to users</td>
+                    </tr>
+                    <tr>
+                        <td>Screenshot Detection</td>
+                        <td>Watermark may appear in screenshot</td>
+                        <td>✅ Different hash = detected</td>
+                    </tr>
+                    <tr>
+                        <td>Reversibility</td>
+                        <td>Can be removed with tools</td>
+                        <td>✅ Cannot reverse hash to image</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Real-World Applications -->
+        <div class="section-card">
+            <h2>🌍 Real-World Applications of SHA-256</h2>
+            
+            <h3>1. Bitcoin & Blockchain</h3>
+            <p>Every block in Bitcoin blockchain is identified by its SHA-256 hash. This ensures transaction integrity.</p>
+
+            <h3>2. SSL/TLS Certificates</h3>
+            <p>When you visit an HTTPS website, SHA-256 verifies the certificate hasn't been tampered with.</p>
+
+            <h3>3. Digital Signatures</h3>
+            <p>Email signatures, PDF signatures, and code signing all use SHA-256 to verify authenticity.</p>
+
+            <h3>4. Git Version Control</h3>
+            <p>Every commit in Git is identified by its SHA-1/SHA-256 hash, making it impossible to alter history.</p>
+
+            <h3>5. File Integrity Monitoring</h3>
+            <p>Antivirus software and security tools use hashing to detect if system files have been modified by malware.</p>
+
+            <h3>6. Password Storage</h3>
+            <p>Websites store hashed passwords (with salt) instead of plain text for security.</p>
+        </div>
+
+        <!-- Viva Questions -->
+        <div class="section-card">
+            <h2>🎓 Viva Questions & Answers</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <h3>Q1: Why can't you prevent screenshots?</h3>
+                <p><strong>A:</strong> Screenshots are OS-level operations controlled by Windows/macOS/mobile OS, not web browsers. Web applications run in a sandboxed environment with limited system access. Only native apps with DRM (like Netflix) can attempt to block screenshots, and even those can be circumvented.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3>Q2: What cryptographic guarantees does SHA-256 provide?</h3>
+                <p><strong>A:</strong></p>
+                <ul>
+                    <li><strong>Integrity:</strong> Any change produces different hash</li>
+                    <li><strong>Authenticity:</strong> Original uploader's hash proves ownership</li>
+                    <li><strong>Non-repudiation:</strong> Cannot deny uploading specific content</li>
+                    <li><strong>Collision resistance:</strong> Virtually impossible for two images to have same hash (probability: 1 in 2^256)</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3>Q3: How does this protect content if screenshots are possible?</h3>
+                <p><strong>A:</strong> If someone screenshots and re-uploads, the hash will differ from the original. The system marks it as "unverified," proving they don't own the original content. This provides legal and ownership evidence even if the content can be copied visually.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3>Q4: What are the limitations?</h3>
+                <p><strong>A:</strong></p>
+                <ul>
+                    <li>Cannot stop viewing/downloading</li>
+                    <li>Cannot prevent screenshots</li>
+                    <li>CAN prove tampering</li>
+                    <li>CAN establish original ownership</li>
+                    <li>CAN provide legal evidence</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3>Q5: Why SHA-256 over MD5 or SHA-1?</h3>
+                <p><strong>A:</strong> MD5 and SHA-1 have known collision vulnerabilities. SHA-256 is currently considered cryptographically secure with no known practical attacks. It's the industry standard for security-critical applications.</p>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="section-card" style="text-align: center;">
+            <h2>🚀 Try It Yourself</h2>
+            <p>Upload an image, take a screenshot, and try re-uploading it to see cryptographic verification in action!</p>
+            <a href="/upload" class="cta-button">Upload Your First Post</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Post - CryptoGram</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            padding-bottom: 50px;
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #dbdbdb;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-content {
+            max-width: 975px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #262626;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: #f0f0f0;
+        }
+        
+        /* Upload Container */
+        .upload-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .upload-card {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .upload-header {
+            padding: 20px;
+            border-bottom: 1px solid #efefef;
+            text-align: center;
+        }
+        
+        .upload-header h2 {
+            font-size: 20px;
+            color: #262626;
+        }
+        
+        .upload-body {
+            padding: 30px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        /* Image Upload Area */
+        .image-upload-area {
+            border: 2px dashed #dbdbdb;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .image-upload-area:hover {
+            border-color: #0095f6;
+            background: #fafafa;
+        }
+        
+        .image-upload-area.has-image {
+            border-style: solid;
+            padding: 0;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .upload-text h3 {
+            font-size: 18px;
+            color: #262626;
+            margin-bottom: 5px;
+        }
+        
+        .upload-text p {
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+        
+        #imageInput {
+            display: none;
+        }
+        
+        #preview {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            display: none;
+        }
+        
+        #preview.show {
+            display: block;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #262626;
+            margin-bottom: 8px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dbdbdb;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #0095f6;
+        }
+        
+        .crypto-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #1565c0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .crypto-info strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-change {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #efefef;
+            color: #262626;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-change:hover {
+            background: #dbdbdb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">🔐 CryptoGram</div>
+            <div class="nav-links">
+                <a href="/home">← Back to Feed</a>
+                <a href="/crypto-demo">🔬 Crypto Demo</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Upload Form -->
+    <div class="upload-container">
+        <div class="upload-card">
+            <div class="upload-header">
+                <h2>📸 Create New Post</h2>
+            </div>
+            
+            <div class="upload-body">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{% if 'success' in message.lower() %}success{% else %}error{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <!-- Image Upload Area -->
+                    <div class="image-upload-area" id="uploadArea" onclick="document.getElementById('imageInput').click()">
+                        <img id="preview" src="" alt="Preview">
+                        <div id="uploadPrompt">
+                            <div class="upload-icon">📷</div>
+                            <div class="upload-text">
+                                <h3>Select Image to Upload</h3>
+                                <p>Click here to choose a file</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="file" id="imageInput" name="image" accept="image/*" required>
+                    
+                    <button type="button" class="btn-change" id="changeBtn" style="display: none;" onclick="document.getElementById('imageInput').click()">
+                        Change Image
+                    </button>
+
+                    <!-- Crypto Info -->
+                    <div class="crypto-info">
+                        <strong>🔒 Cryptographic Protection Active</strong>
+                        When you upload, a SHA-256 hash will be generated to verify image integrity and ownership.
+                        This hash is stored securely and used to detect tampering.
+                    </div>
+
+                    <!-- Caption -->
+                    <div class="form-group">
+                        <label for="caption">Caption</label>
+                        <textarea id="caption" name="caption" placeholder="Write a caption..."></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit" id="submitBtn" disabled>
+                        Upload Post
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const changeBtn = document.getElementById('changeBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                    uploadPrompt.style.display = 'none';
+                    uploadArea.classList.add('has-image');
+                    changeBtn.style.display = 'block';
+                    submitBtn.disabled = false;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
