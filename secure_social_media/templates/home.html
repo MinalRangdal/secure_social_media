@@ -3,89 +3,473 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>CryptoGram - Secure Social Feed</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            padding-bottom: 50px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+        
+        /* Navigation Bar */
+        .navbar {
             background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-bottom: 1px solid #dbdbdb;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
+        
+        .navbar-content {
+            max-width: 975px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .welcome {
-            color: #667eea;
-            font-size: 24px;
-            margin-bottom: 30px;
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .alert {
-            padding: 12px;
-            border-radius: 5px;
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #262626;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: #f0f0f0;
+        }
+        
+        .btn-upload {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white !important;
+            padding: 10px 20px !important;
+        }
+        
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        /* Main Feed Container */
+        .feed-container {
+            max-width: 614px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        /* Flash Messages */
+        .flash-messages {
             margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Post Card */
+        .post-card {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        
+        /* Post Header */
+        .post-header {
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #efefef;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
             font-size: 14px;
         }
-        .alert-success {
-            background: #efe;
-            color: #3c3;
-            border-left: 4px solid #3c3;
-        }
-        .logout-btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
+        
+        .username {
             font-weight: 600;
+            font-size: 14px;
+            color: #262626;
+        }
+        
+        .verification-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-verified {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-unverified {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Post Image */
+        .post-image-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+        }
+        
+        .post-image {
+            width: 100%;
+            display: block;
+        }
+        
+        .post-image.unverified {
+            filter: blur(10px);
+            opacity: 0.5;
+        }
+        
+        .unverified-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .unverified-overlay h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .unverified-overlay p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Post Actions */
+        .post-actions {
+            padding: 12px 16px;
+            display: flex;
+            gap: 16px;
+            border-bottom: 1px solid #efefef;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 4px;
             transition: transform 0.2s;
         }
-        .logout-btn:hover {
-            transform: translateY(-2px);
+        
+        .action-btn:hover {
+            transform: scale(1.1);
         }
-        .content {
-            margin-top: 30px;
+        
+        .btn-verify {
+            margin-left: auto;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-verify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        /* Post Info */
+        .post-info {
+            padding: 12px 16px;
+        }
+        
+        .post-caption {
+            font-size: 14px;
+            line-height: 18px;
+            color: #262626;
+            margin-bottom: 8px;
+        }
+        
+        .post-caption .username {
+            margin-right: 6px;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: #8e8e8e;
+            text-transform: uppercase;
+        }
+        
+        /* Comments Section */
+        .comments-section {
+            padding: 12px 16px;
+            border-top: 1px solid #efefef;
+        }
+        
+        .comment-input {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .comment-input input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            padding: 8px 0;
+        }
+        
+        .comment-input button {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .comment-input button:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dbdbdb;
+        }
+        
+        .empty-state h2 {
+            font-size: 24px;
+            color: #262626;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            color: #8e8e8e;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state a {
+            display: inline-block;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Crypto Info Banner */
+        .crypto-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             padding: 20px;
-            background: #f9f9f9;
-            border-radius: 5px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .crypto-banner h3 {
+            margin-bottom: 8px;
+        }
+        
+        .crypto-banner p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .crypto-banner a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🏠 Dashboard</h1>
-        <p class="welcome">Welcome back!</p>
-        
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">🔐 CryptoGram</div>
+            <div class="nav-links">
+                <a href="/home">Feed</a>
+                <a href="/upload" class="btn-upload">+ New Post</a>
+                <a href="/crypto-demo">🔬 Crypto Demo</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Feed -->
+    <div class="feed-container">
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
+        <div class="flash-messages">
             {% for message in messages %}
-            <div class="alert alert-success">
-                ✅ {{ message }}
+            <div class="alert alert-{% if 'success' in message.lower() or 'successful' in message.lower() %}success{% else %}error{% endif %}">
+                {{ message }}
             </div>
             {% endfor %}
+        </div>
         {% endif %}
         {% endwith %}
 
-        <div class="content">
-            <h3>✨ You're successfully logged in!</h3>
-            <p style="margin-top: 10px; color: #666;">
-                Your authentication system is working perfectly with OTP verification.
-            </p>
+        <!-- Crypto Info Banner -->
+        <div class="crypto-banner">
+            <h3>🔒 Cryptographically Secured Feed</h3>
+            <p>All images are protected with SHA-256 hashing. <a href="/crypto-demo">Learn how it works →</a></p>
         </div>
 
-        <div style="margin-top: 30px;">
-            <a href="/logout" class="logout-btn">Logout</a>
-        </div>
+        <!-- Posts -->
+        {% if posts %}
+            {% for post in posts %}
+            <div class="post-card">
+                <!-- Post Header -->
+                <div class="post-header">
+                    <div class="user-info">
+                        <div class="user-avatar">{{ post.username[0].upper() }}</div>
+                        <span class="username">{{ post.username }}</span>
+                    </div>
+                    <span class="verification-badge {% if post.is_verified %}badge-verified{% else %}badge-unverified{% endif %}">
+                        {% if post.is_verified %}
+                        ✓ Verified
+                        {% else %}
+                        ⚠ Unverified
+                        {% endif %}
+                    </span>
+                </div>
+
+                <!-- Post Image -->
+                <div class="post-image-container">
+                    <img src="/static/uploads/{{ post.image_path }}" 
+                         alt="Post" 
+                         class="post-image {% if not post.is_verified %}unverified{% endif %}">
+                    
+                    {% if not post.is_verified %}
+                    <div class="unverified-overlay">
+                        <h3>⚠️ Content Not Verified</h3>
+                        <p>This image failed cryptographic verification.<br>It may have been tampered with or re-uploaded.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Post Actions -->
+                <div class="post-actions">
+                    <button class="action-btn" title="Like">❤️</button>
+                    <button class="action-btn" title="Comment">💬</button>
+                    <button class="action-btn" title="Share">📤</button>
+                    <a href="/verify/{{ post.id }}" class="btn-verify">🔍 Verify Hash</a>
+                </div>
+
+                <!-- Post Info -->
+                <div class="post-info">
+                    <div class="post-caption">
+                        <span class="username">{{ post.username }}</span>
+                        {{ post.caption if post.caption else 'No caption' }}
+                    </div>
+                    <div class="post-time">{{ post.timestamp[:10] }}</div>
+                </div>
+
+                <!-- Comments Section (Dummy) -->
+                <div class="comments-section">
+                    <div class="comment-input">
+                        <input type="text" placeholder="Add a comment..." disabled>
+                        <button disabled>Post</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <h2>📸 No Posts Yet</h2>
+                <p>Be the first to share something!</p>
+                <a href="/upload">Upload Your First Post</a>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>
